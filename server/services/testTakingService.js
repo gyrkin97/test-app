@@ -143,6 +143,19 @@ module.exports = (db) => {
             throw new Error('ФИО и ответы обязательны.');
         }
         
+        // ИСПРАВЛЕНИЕ: Проверка на повторное прохождение теста
+        // Проверяем, не сдал ли пользователь уже этот тест успешно
+        const existingResult = await get(db, 
+            `SELECT id, passed FROM test_results 
+             WHERE test_id = ? AND fio = ? COLLATE NOCASE AND passed = 1
+             ORDER BY date DESC LIMIT 1`,
+            [testId, fio.trim()]
+        );
+
+        if (existingResult) {
+            throw new Error('Вы уже успешно сдали этот тест. Повторное прохождение не требуется.');
+        }
+        
         const questionIds = userAnswers.map(a => a.questionId).filter(id => id);
         if (questionIds.length === 0) { 
             return {

@@ -3,6 +3,19 @@
 
 require('dotenv').config();
 
+// --- Валидация обязательных переменных окружения ---
+const requiredEnvVars = ['SESSION_SECRET', 'ADMIN_PASSWORD_HASH'];
+const missingVars = requiredEnvVars.filter(v => !process.env[v]);
+
+if (missingVars.length > 0) {
+    console.error('❌ КРИТИЧЕСКАЯ ОШИБКА: Не установлены обязательные переменные окружения:');
+    console.error(missingVars.map(v => `   - ${v}`).join('\n'));
+    console.error('Проверьте файл .env и убедитесь, что все переменные заполнены.');
+    console.error('Для генерации SESSION_SECRET используйте: openssl rand -base64 32');
+    console.error('Для генерации паролей используйте: node utils/hash-password.js ваш_пароль');
+    process.exit(1);
+}
+
 const express = require('express');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
@@ -93,6 +106,24 @@ const loginLimiter = rateLimit({
     message: 'Слишком много попыток входа. Пожалуйста, попробуйте снова через 15 минут.'
 });
 
+// НОВОЕ: Ограничитель скорости для публичных эндпоинтов отправки результатов
+const submitLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 минут
+    max: 10, // Максимум 10 отправок за 5 минут с одного IP
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Слишком много попыток отправки. Пожалуйста, попробуйте позже.'
+});
+
+// НОВОЕ: Ограничитель скорости для загрузки вопросов (защита от DDoS)
+const questionsLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 минута
+    max: 20, // Максимум 20 запросов за минуту
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Слишком много запросов. Пожалуйста, подождите.'
+});
+
 // --- Подключение роутов ---
 const publicRoutes = require('./routes/public.routes')(db);
 const adminAuthRoutes = require('./routes/admin-auth.routes')(db);
@@ -105,6 +136,9 @@ const adminOrganizationsRoutes = require('./routes/admin-organizations.routes')(
 app.get('/api/events', eventEmitter.getEventsHandler);
 
 // Монтирование роутеров
+// НОВОЕ: Применяем rate limiters к публичным эндпоинтам
+app.use('/api/public/tests/:testId/submit', submitLimiter);
+app.use('/api/public/tests/:testId/questions', questionsLimiter);
 app.use('/api', publicRoutes);
 app.use('/api/admin/login', loginLimiter);
 app.use('/api/admin/dev-login', loginLimiter);
