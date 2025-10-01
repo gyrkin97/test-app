@@ -1,0 +1,179 @@
+/* --- ФАЙЛ: client/styles/portal.css (ПОЛНАЯ ИТОГОВАЯ ВЕРСИЯ) --- */
+
+/* ---------- RESET ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 
+  ---------- BODY (ИСПРАВЛЕНО) ----------
+  Используем класс .portal-page для применения этих стилей только на странице портала,
+  чтобы избежать конфликта с глобальными стилями из base.css.
+  Страница строго 100vh, без прокрутки, с центрированием контента.
+*/
+body.portal-page {
+    font-family: 'Inter', sans-serif;
+    background: #f5f7fa;
+    height: 100vh;            /* фиксируем высоту */
+    display: flex;
+    align-items: center;      /* центрируем по вертикали */
+    justify-content: center;  /* центрируем по горизонтали */
+    overflow: hidden;         /* убираем любую прокрутку */
+}
+
+/* ---------- ОБЁРТКА ---------- */
+.portal-wrapper {
+    width: 100%;
+    max-width: 900px;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+/* ---------- ЛОГО + ЗАГОЛОВОК ---------- */
+.portal-logo {
+    width: clamp(100px, 10vh, 140px);
+    margin-bottom: 1.5vh;
+}
+
+.portal-title {
+    font-size: clamp(1.5rem, 3vh, 2.2rem);
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5vh;
+}
+
+.portal-subtitle {
+    font-size: clamp(0.875rem, 1.8vh, 1.1rem);
+    color: #6b7280;
+    margin-bottom: 3vh;
+}
+
+/* ---------- СЕТКА КАРТОЧЕК ---------- */
+.portal-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(220px, 25vw, 280px), 1fr));
+    gap: clamp(1rem, 2vh, 2rem);
+}
+
+/* ---------- КАРТОЧКА ---------- */
+.action-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px) saturate(180%);
+    border-radius: clamp(14px, 2vh, 20px);
+    padding: clamp(1.25rem, 2.5vh, 2.5rem) clamp(1rem, 2vw, 2rem);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;   /* строгий квадрат */
+    max-height: 30vh;      /* не выходим за экран */
+}
+
+.action-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Иконка */
+.card-icon {
+    font-size: clamp(2rem, 4vh, 3.5rem);
+    margin-bottom: 1vh;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+.action-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Текст */
+.card-title {
+    font-size: clamp(1.1rem, 2vh, 1.5rem);
+    font-weight: 700;
+    margin-bottom: 0.5vh;
+    line-height: 1.2;
+}
+.card-description {
+    font-size: clamp(0.75rem, 1.5vh, 1rem);
+    color: #6b7280;
+    line-height: 1.3;
+    margin-bottom: 1vh;
+}
+
+/* Бейдж */
+.card-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #1976d2, #56a5ff);
+    color: white;
+    border-radius: 999px;
+    font-size: clamp(0.65rem, 1.2vh, 0.875rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Цветовые варианты */
+.action-card.primary {
+    border-left: 3px solid #1976d2;
+}
+.action-card.secondary {
+    border-left: 3px solid #1e8e3e;
+}
+.action-card.secondary .card-badge {
+    background: linear-gradient(135deg, #1e8e3e, #34d058);
+}
+.action-card.accent {
+    border-left: 3px solid #d97706;
+}
+.action-card.accent .card-badge {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+}
+
+/* ---------- Адаптив: до 480 px ---------- */
+@media (max-width: 480px) {
+    .portal-actions {
+        grid-template-columns: 1fr;   /* одна колонка */
+        gap: 1rem;
+    }
+    .action-card {
+        aspect-ratio: auto;           /* убираем квадрат */
+        min-height: 20vh;             /* но не меньше 20 % высоты экрана */
+    }
+}
+
+/* ---------- Отключаем анимацию по желанию пользователя ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .action-card {
+        transition: none;
+    }
+    .action-card:hover {
+        transform: none;
+    }
+    .card-icon {
+        transition: none;
+    }
+}
+
+/* ---------- Fallback для браузеров без поддержки backdrop-filter ---------- */
+@supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    .action-card {
+        background: rgba(255, 255, 255, 0.95);
+    }
+}
+
+/* ---------- Улучшенная доступность для фокуса ---------- */
+.action-card:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 4px;
+    transform: translateY(-2px);
+}

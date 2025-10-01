@@ -1,0 +1,451 @@
+/* ===========================================================
+   СТИЛИ ДЛЯ ГРАФИКА КОМАНДИРОВОК
+   =========================================================== */
+
+/* CSS переменные для цветовой схемы */
+:root {
+  --card: #ffffff;
+  --card-2: #f8fafc;
+  --border-color: #e2e8f0;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --muted: #94a3b8;
+  --bad: #ef4444;
+  --accent: #3b82f6;
+  --accent-soft-bg: #eff6ff;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+}
+
+/* ---------- Основной контейнер ---------- */
+.trips-board {
+  background: var(--card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: var(--space-4);
+  backdrop-filter: blur(10px);
+}
+
+/* ---------- Заголовок раздела ---------- */
+.trips-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.trips-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Контейнер таймлайна ---------- */
+.trips-timeline-grid {
+  margin-top: var(--space-4);
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+/* ---------- Основная сетка ---------- */
+.trips-grid {
+  display: grid;
+  grid-template-columns: 140px repeat(var(--days-in-month), 32px);
+  min-width: auto;
+  background: var(--card);
+  position: relative;
+}
+
+.grid-header,
+.grid-body {
+  display: contents;
+}
+
+/* ---------- Заголовки дней ---------- */
+.grid-header-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--space-1);
+  background: var(--card-2);
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  position: relative;
+  width: 32px;
+  box-sizing: border-box;
+}
+
+.grid-header-cell.employee-header {
+  background: var(--card-2);
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.85rem;
+  justify-content: center;
+}
+
+/* День недели */
+.grid-header-cell::after {
+  content: attr(data-weekday);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* Выходные */
+.grid-header-cell.is-weekend {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--bad);
+}
+
+.grid-header-cell.is-weekend::after {
+  color: var(--bad);
+}
+
+/* Сегодня */
+.grid-header-cell.is-today {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  margin: 0;
+}
+
+.grid-header-cell.is-today::after {
+  color: var(--accent);
+}
+
+/* ---------- Колонка сотрудников ---------- */
+.employee-name-cell {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: var(--card);
+  border-right: 2px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 500;
+  color: var(--text);
+  font-size: 0.8rem;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  min-height: 32px;
+  width: 140px;
+  box-sizing: border-box;
+  transition: none;
+  line-height: 1.2;
+}
+
+.employee-name-cell:hover {
+  background: var(--accent-soft-bg);
+  transform: none;
+}
+
+/* ---------- Строки с днями ---------- */
+.employee-trips-row {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(var(--days-in-month), 32px);
+  background: transparent;
+  position: relative;
+}
+
+/* ---------- Фоновые клетки дней ---------- */
+.day-cell-bg {
+  grid-row: 1;
+  min-height: 32px;
+  background: transparent;
+  border-right: 1px solid rgba(226, 232, 240, 0.2);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.2);
+  position: relative;
+  z-index: 1;
+  width: 32px;
+  box-sizing: border-box;
+}
+
+/* Явное окрашивание выходных */
+.day-cell-bg.is-weekend {
+  background: rgba(239, 68, 68, 0.06) !important;
+}
+
+/* Явное окрашивание сегодня */
+.day-cell-bg.is-today {
+  background: rgba(59, 130, 246, 0.08) !important;
+  z-index: 2;
+}
+
+/* Дни с командировками - убираем фоновое окрашивание, оставляем только плашку */
+.day-cell-bg.has-trip {
+  background: transparent !important;
+}
+
+/* ---------- Плашки командировок ---------- */
+.trip-bar {
+  position: relative;
+  grid-row: 1;
+  z-index: 5;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.7rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  isolation: isolate;
+  transition: none;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 4px;
+  overflow: hidden;
+  margin: 1px;
+  border: none;
+  box-sizing: border-box;
+  width: calc(100% - 2px);
+}
+
+/* Убираем все лишние эффекты */
+.trip-bar::before {
+  display: none;
+}
+
+.trip-bar:hover {
+  transform: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  filter: none;
+}
+
+/* Иконка транспорта */
+.trip-bar .transport-icon {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  opacity: 0.9;
+}
+
+/* Текст назначения */
+.trip-bar .label {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  font-size: 0.65rem;
+}
+
+/* ---------- Подсказки ---------- */
+.trip-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: rgba(31, 41, 55, 0.95);
+  color: white;
+  padding: var(--space-2);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.15s ease;
+  z-index: 100;
+  min-width: 160px;
+  max-width: 200px;
+}
+
+.trip-bar:hover .trip-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-destination {
+  font-weight: 700;
+  font-size: 0.75rem;
+  margin-bottom: var(--space-1);
+  color: white;
+}
+
+.tooltip-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-2);
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+.tooltip-details .label {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.tooltip-details .value {
+  color: white;
+  font-weight: 600;
+}
+
+/* ---------- Адаптивность ---------- */
+@media (max-width: 1536px) {
+  .trips-grid {
+    grid-template-columns: 120px repeat(var(--days-in-month), 30px);
+  }
+  
+  .employee-name-cell {
+    width: 120px;
+    font-size: 0.75rem;
+  }
+  
+  .grid-header-cell {
+    width: 30px;
+    font-size: 0.75rem;
+  }
+  
+  .employee-trips-row {
+    grid-template-columns: repeat(var(--days-in-month), 30px);
+  }
+  
+  .day-cell-bg {
+    width: 30px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .trips-board {
+    padding: var(--space-3);
+  }
+  
+  .employee-name-cell {
+    width: 110px;
+    padding: var(--space-1) var(--space-2);
+  }
+  
+  .trips-header h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* ---------- Анимации ---------- */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.employee-trips-row {
+  animation: slideIn 0.2s ease-out backwards;
+}
+
+.employee-trips-row:nth-child(odd) {
+  animation-delay: 0.02s;
+}
+
+.employee-trips-row:nth-child(even) {
+  animation-delay: 0.04s;
+}
+
+/* ---------- Режим пониженной анимации ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .trip-bar,
+  .employee-name-cell,
+  .employee-trips-row {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ---------- Улучшенная прокрутка ---------- */
+.trips-timeline-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.trips-timeline-grid::-webkit-scrollbar-track {
+  background: var(--card-2);
+  border-radius: 3px;
+}
+
+.trips-timeline-grid::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.trips-timeline-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ---------- Фикс для выравнивания ---------- */
+.trips-grid {
+  align-items: stretch;
+}
+
+.grid-header-cell,
+.employee-name-cell,
+.day-cell-bg {
+  align-self: stretch;
+}
+
+/* Явное указание размеров для предотвращения съезжания */
+.trips-grid > * {
+  min-width: 0;
+}
+
+/* Фикс для теней - ограничиваем распространение */
+.trip-bar {
+  contain: layout style;
+}
+
+/* ---------- Дополнительные утилиты ---------- */
+.trips-controls {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.trips-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.trips-btn:hover {
+  background: #2563eb;
+}
+
+.trips-month-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trips-month-selector select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: white;
+}

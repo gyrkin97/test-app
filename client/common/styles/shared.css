@@ -1,0 +1,601 @@
+/* --- ФАЙЛ: client/common/styles/shared.css (ПОЛНАЯ ИТОГОВАЯ ВЕРСИЯ) --- */
+/*
+Содержит стили для UI-компонентов, которые являются общими (shared)
+для нескольких страниц, таких как панель администратора и страница теста.
+*/
+
+/* Глобальные переходы для интерактивных элементов */
+.card, .btn, .input-wrap input, .input-wrap textarea, .password-toggle-btn {
+  transition: 
+    color 0.2s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/*
+Карточки (основной контейнер)
+*/
+.card {
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: 1.125rem; /* 18px */
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    var(--shadow-md),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/*
+Элементы форм (поля ввода, кнопки)
+*/
+.input-wrap {
+  margin-bottom: var(--space-4);
+  text-align: left;
+}
+.input-wrap label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.375rem; /* 6px */
+  color: var(--text-secondary);
+}
+
+.input-wrap input,
+.input-wrap textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-3) 0.875rem; /* 12px 14px */
+  font-size: 1rem;
+  line-height: 1.2;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+}
+
+.input-wrap input:focus,
+.input-wrap textarea:focus {
+  outline: none;
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent;
+  background-clip: padding-box; /* Важно для работы с градиентной рамкой */
+  box-shadow: 0 0 0 4px var(--accent-ring);
+  background-image: 
+    linear-gradient(white, white), 
+    linear-gradient(135deg, var(--accent-2), var(--accent));
+  background-origin: border-box;
+}
+
+.input-wrap textarea {
+  resize: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) 1.125rem; /* 12px 18px */
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  background: var(--gradient-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:disabled {
+  background: rgba(201, 214, 234, 0.7);
+  box-shadow: none;
+  cursor: not-allowed;
+  color: #6b7a90;
+  transform: none;
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #868f96 0%, #596164 100%);
+}
+
+.btn-danger {
+  background: var(--gradient-danger);
+}
+
+/*
+Стили для модальных окон
+*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(31, 41, 55, 0.6);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.modal-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
+}
+
+.modal-content {
+  background: var(--card);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-width: 420px;
+  width: 90%;
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+
+.modal-overlay.visible .modal-content {
+  transform: scale(1);
+}
+
+.modal-large {
+  max-width: 800px;
+}
+
+.modal-content.modal-large {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-header {
+  margin-bottom: var(--space-6);
+}
+
+.modal-icon-wrap {
+  margin: 0 auto var(--space-4);
+  width: 3rem; /* 48px */
+  height: 3rem; /* 48px */
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, #eef6ff, #ffffff);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.modal-icon-wrap.icon-warning {
+  background: linear-gradient(145deg, #fff2e2, #ffffff);
+  color: var(--warn);
+}
+
+.modal-header-text h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.modal-header-text p {
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.modal-actions .btn {
+  flex: 1;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.5;
+  padding: var(--space-3) 1.125rem; /* 12px 18px */
+  box-sizing: border-box;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/*
+Прочие общие элементы
+*/
+.error-message {
+  color: var(--bad) !important;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  margin: var(--space-2) 0 !important;
+  height: 1rem;
+  text-align: center;
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap #passwordInput,
+.password-wrap #devPasswordInput {
+  padding-right: 2.8125rem; /* 45px */
+}
+
+.password-toggle-btn {
+  position: absolute; top: 50%; right: 0.3125rem; transform: translateY(-50%);
+  background: transparent; border: none; padding: var(--space-2); cursor: pointer; color: var(--muted);
+  border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center;
+}
+
+.password-toggle-btn:hover {
+  background-color: var(--bg-hover-light);
+  color: var(--accent);
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0) scale(1); }
+  20%, 80% { transform: translate3d(2px, 0, 0) scale(1); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0) scale(1); }
+  40%, 60% { transform: translate3d(4px, 0, 0) scale(1); }
+}
+
+.modal-content.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Fallback для старых браузеров */
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .card {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  .input-wrap input,
+  .input-wrap textarea {
+    background: rgba(253, 253, 255, 0.9);
+  }
+  .btn {
+    background: var(--gradient-primary);
+  }
+}
+
+/* Общий стиль для блоков с пояснениями в модальных окнах */
+.explanation-box {
+  margin-top: 0.625rem; /* 10px */
+  padding: 0.625rem; /* 10px */
+  background-color: var(--card);
+  border-left: 3px solid var(--muted);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.8125rem; /* 13px */
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.explanation-box svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+/* --- Стили для модального окна выбора типа записи --- */
+.modal-medium {
+  max-width: 640px;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.choice-card, .manage-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.4;
+  min-height: 180px;
+}
+
+.choice-card:hover, .manage-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  background-color: var(--accent-soft-bg);
+}
+
+.choice-card:focus-visible, .manage-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  background-color: var(--accent-soft-bg);
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.choice-card-icon, .manage-card-icon {
+  margin-bottom: var(--space-4);
+  pointer-events: none; /* Чтобы клик проходил на кнопку */
+}
+
+.choice-card-icon svg, .manage-card-icon svg {
+  width: 3.5rem;  /* 56px */
+  height: 3.5rem; /* 56px */
+  stroke-width: 1.5;
+  transition: transform 0.3s ease;
+}
+
+.choice-card:hover .choice-card-icon svg,
+.manage-card:hover .manage-card-icon svg {
+    transform: scale(1.1);
+}
+
+.form-section {
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--space-4);
+}
+.form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.form-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.form-section-header svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.form-section-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.form-grid-col-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-5);
+}
+
+.form-grid-col-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-5);
+    align-items: start; /* Выравниваем элементы по верху */
+}
+
+.input-with-icon {
+    position: relative;
+}
+.input-with-icon .input-icon {
+    position: absolute;
+    right: var(--space-4);
+    top: calc(50% + 0.625rem); /* Смещаем иконку ниже лейбла */
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    transition: color 0.2s;
+}
+.input-wrap input:focus ~ .input-icon {
+    color: var(--accent);
+}
+
+.advanced-fields-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 700;
+  background: none;
+  border: none;
+  padding: var(--space-2) 0;
+  font-size: 0.9rem;
+}
+.advanced-fields-toggle svg {
+  transition: transform 0.3s ease;
+}
+.advanced-fields-toggle.is-open svg {
+  transform: rotate(90deg);
+}
+
+.advanced-fields-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out, margin-top 0.5s ease-out;
+  opacity: 0;
+}
+.advanced-fields-content.is-open {
+  max-height: 1000px; /* Достаточно большая высота */
+  opacity: 1;
+  margin-top: var(--space-5);
+}
+
+/*
+Медиа-запросы для общих компонентов
+*/
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-4);
+  }
+  .choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* --- СТИЛИ ДЛЯ КАСТОМНОГО ВЫПАДАЮЩЕГО СПИСКА --- */
+.custom-select-options {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.custom-option {
+    padding: var(--space-3) var(--space-4);
+    transition: background-color 0.2s;
+    cursor: pointer;
+    text-align: left;
+}
+.custom-option:hover {
+    background-color: var(--accent-soft-bg);
+}
+.custom-option:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* === ИСПРАВЛЕНИЕ ДЛЯ БОЛЬШИХ МОДАЛЬНЫХ ОКОН С ПРОКРУТКОЙ === */
+
+.modal-content.modal-large form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.form-body-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-4);
+  margin: 0 calc(-1 * var(--space-4));
+}
+
+.modal-actions {
+    flex-shrink: 0;
+    padding-top: var(--space-5);
+    margin-top: auto;
+}
+/* Исправление высоты модальных окон и выпадающих списков */
+.manage-modal-content {
+    max-height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.manage-list {
+    max-height: 45vh !important; /* Увеличили высоту списка */
+    overflow-y: auto !important;
+    flex-shrink: 0 !important;
+}
+
+.manage-add-form {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+    padding-top: var(--space-5) !important;
+    border-top: 1px solid var(--border-color) !important;
+}
+
+/* Увеличиваем высоту выпадающего списка должностей */
+#position-options {
+    max-height: 180px !important;
+    overflow-y: auto !important;
+}
+
+/* Убедимся, что все три должности видны */
+.custom-option {
+    padding: var(--space-3) var(--space-4) !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Увеличиваем отступы в модальном окне */
+.manage-modal-content {
+    padding: var(--space-6) !important;
+}
+
+.manage-list {
+    margin-bottom: var(--space-4) !important;
+}
+
+/* Прокрутка для длинных списков */
+.modal-content.modal-large {
+    max-height: 90vh !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.form-body-scrollable {
+    flex-grow: 1 !important;
+    overflow-y: auto !important;
+    max-height: none !important;
+}

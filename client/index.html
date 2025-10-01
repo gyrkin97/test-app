@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прибор Автоматика | Система Тестирования</title>
+    <meta name="description" content="Портал системы тестирования и учета компании Прибор Автоматика">
+    
+    <!-- Подключение шрифта -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Подключение CSS стилей -->
+    <link rel="stylesheet" href="/common/styles/portal.css">
+    
+    <!-- Иконка вкладки -->
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+</head>
+<body class="portal-page">
+    <div class="portal-wrapper">
+        <!-- Логотип и заголовок -->
+        <img src="/assets/logo.png" alt="Логотип Прибор Автоматика" class="portal-logo">
+        <h1 class="portal-title">Система Тестирования и Учета</h1>
+        <p class="portal-subtitle">Выберите раздел для работы с системой тестирования и метрологического контроля</p>
+        
+        <!-- Навигация по разделам -->
+        <nav aria-label="Основные разделы системы">
+            <div class="portal-actions">
+                <!-- Карточка 1: Пройти тестирование -->
+                <a href="/test-runner/" class="action-card primary">
+                    <span class="card-icon">🧪</span>
+                    <h3 class="card-title">Пройти Тестирование</h3>
+                    <p class="card-description">Доступ к системе тестирования сотрудников</p>
+                    <span class="card-badge">Онлайн</span>
+                </a>
+                
+                <!-- Карточка 2: Управление тестами -->
+                <a href="/admin/" class="action-card secondary">
+                    <span class="card-icon"⚙️</span>
+                    <h3 class="card-title">Управление Тестами</h3>
+                    <p class="card-description">Администрирование тестов и вопросов</p>
+                    <span class="card-badge">Админ</span>
+                </a>
+                
+                <!-- Карточка 3: Панель метрологии -->
+                <a href="/dev-panel/" class="action-card accent">
+                    <span class="card-icon">📊</span>
+                    <h3 class="card-title">Панель Метрологии</h3>
+                    <p class="card-description">Метрологический контроль и учет оборудования</p>
+                    <span class="card-badge">Профи</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

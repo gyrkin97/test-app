@@ -1,0 +1,186 @@
+/* --- ФАЙЛ: client/styles/toastify.min.css (ФИНАЛЬНАЯ ВЕРСИЯ) --- */
+
+/* 
+ ============================================================================
+  ЧАСТЬ 1: ОРИГИНАЛЬНЫЙ КОД БИБЛИОТЕКИ TOASTIFY.JS v1.12.0
+ ============================================================================
+*/
+/*!
+ * Toastify.js 1.12.0
+ * https://github.com/apvarun/toastify-js
+ * @license MIT licensed
+ */
+.toastify {
+  padding: 12px 20px;
+  color: #fff;
+  display: inline-block;
+  box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12),
+    0 10px 36px -4px rgba(77, 96, 232, 0.3);
+  background: -webkit-linear-gradient(315deg, #73a5ff, #5477f5);
+  background: linear-gradient(135deg, #73a5ff, #5477f5);
+  position: fixed;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  max-width: calc(50% - 20px);
+  z-index: 2147483647;
+}
+.toastify.on {
+  opacity: 1;
+}
+.toastify-close {
+  background: 0 0;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1em;
+  opacity: 0.4;
+  padding: 0 5px;
+}
+.toastify-right {
+  right: 15px;
+}
+.toastify-left {
+  left: 15px;
+}
+.toastify-top {
+  top: -150px;
+}
+.toastify-bottom {
+  bottom: -150px;
+}
+.toastify-rounded {
+  border-radius: 25px;
+}
+.toastify-avatar {
+  width: 1.5em;
+  height: 1.5em;
+  margin: -7px 5px;
+  border-radius: 2px;
+}
+.toastify-center {
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
+@media only screen and (max-width: 360px) {
+  .toastify-right,
+  .toastify-left {
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    max-width: -webkit-fit-content;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+  }
+}
+
+/* 
+ ============================================================================
+  ЧАСТЬ 2: КАСТОМНЫЕ СТИЛИ ДЛЯ ДАННОГО ПРОЕКТА
+ ============================================================================
+*/
+.toastify {
+  padding: 12px 20px !important;
+  color: #fff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+  position: fixed !important;
+  opacity: 0 !important;
+  transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) !important;
+  border-radius: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  cursor: pointer !important;
+  transform: translateY(-20px) !important;
+  background: none !important;
+}
+
+.toastify.on {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.toast-success {
+  background: linear-gradient(to right, #1e8e3e, #28a745) !important;
+}
+
+.toast-error {
+  background: linear-gradient(to right, #d93025, #e54d42) !important;
+}
+
+.toast-info {
+  background: linear-gradient(
+    to right,
+    var(--accent),
+    var(--accent-2)
+  ) !important;
+}
+
+/* 
+ ============================================================================
+  ЧАСТЬ 3 (ИСПРАВЛЕННАЯ ВЕРСИЯ): Минималистичная кнопка закрытия
+ ============================================================================
+*/
+
+/* 1. Убираем фон и рамку, делаем кнопку "невидимой" */
+.toast-close {
+  /* Полностью убираем фон, даже при наведении */
+  background: transparent !important;
+  border: none;
+  
+  /* Сбрасываем размеры и скругление, чтобы кнопка была размером с иконку */
+  width: auto;
+  height: auto;
+  border-radius: 0;
+
+  /* Остальные стили для правильного позиционирования и сброса текста */
+  opacity: 1 !important; /* Прозрачностью будем управлять через саму иконку */
+  padding: 0 !important;
+  margin-left: 12px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  flex-shrink: 0;
+  
+  /* Убираем лишние анимации с фона */
+  transition: none;
+}
+
+/* Дополнительно гарантируем, что фон не появится при наведении */
+.toast-close:hover {
+  background-color: transparent !important;
+}
+
+/* 2. Стилизуем саму иконку-крестик (через псевдо-элемент) */
+.toast-close::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  
+  /* Вставляем SVG-иконку. Цвет (stroke) остается белым, но мы управляем им через opacity */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cline x1='18' y1='6' x2='6' y2='18'%3e%3c/line%3e%3cline x1='6' y1='6' x2='18' y2='18'%3e%3c/line%3e%3c/svg%3e");
+  
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  /* КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: делаем иконку полупрозрачной по умолчанию */
+  opacity: 0.7; 
+  transition: opacity 0.2s ease;
+}
+
+/* 3. Делаем иконку ярче (полностью непрозрачной) при наведении на кнопку */
+.toast-close:hover::before {
+  opacity: 1;
+}

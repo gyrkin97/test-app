@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прибор Автоматика | Система Тестирования</title>
+
+    <!-- Подключение шрифта -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Иконка вкладки -->
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+
+    <!-- Подключение библиотеки для всплывающих уведомлений -->
+    <link rel="stylesheet" href="/common/styles/toastify.min.css">
+    <script src="/common/js/toastify.min.js"></script>
+    <script src="/common/js/Sortable.min.js"></script>
+
+    <!-- Подключение CSS стилей -->
+    <link rel="stylesheet" href="/common/styles/base.css">
+    <link rel="stylesheet" href="/common/styles/shared.css">
+    <link rel="stylesheet" href="/common/styles/test-runner.css">
+</head>
+<body>
+    <div class="wrap">
+        
+        <!-- =============================================================== -->
+        <!-- ЭКРАН 1: ПРИВЕТСТВИЕ И ВВОД ФИО                              -->
+        <!-- =============================================================== -->
+        <div id="welcomeScreen">
+            <div class="welcome-card">
+                <div class="welcome-logo-container">
+                    <img src="/assets/logo.png" alt="Логотип Прибор Автоматика" class="welcome-logo">
+                </div>
+                <div class="welcome-content-wrapper">
+                    <div class="welcome-form">
+                        <h1 class="main-title">Система Тестирования</h1>
+                        <p class="intro-text">Пожалуйста, введите ваши фамилию, имя и отчество, чтобы продолжить.</p>
+                        <form id="fioForm" onsubmit="return false;">
+                            <div class="input-wrap with-icon">
+                                <input type="text" id="fioInput" placeholder="Например: Иванов Иван Иванович" autocomplete="name" required>
+                                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div class="start-btn">
+                                <button type="button" id="startBtn" class="btn">Продолжить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- ЭКРАН 2: ВЫБОР ТЕСТА                                          -->
+        <!-- =============================================================== -->
+        <div id="testSelectionScreen" class="hidden">
+            <header class="header">
+                <div class="header-spacer">
+                    <!-- Пустой спейсер для выравнивания -->
+                </div>
+                <h1 class="main-title">Система Тестирования</h1>
+                <div class="header-spacer">
+                    <button id="changeUserBtn" class="change-user-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Сменить</span>
+                    </button>
+                </div>
+            </header>
+            <h2 id="selectionTitle" class="welcome-title"></h2>
+            <div id="publicTestList" class="test-grid">
+                <!-- Карточки тестов будут загружены сюда динамически -->
+                <div class="spinner"></div>
+            </div>
+        </div>
+        
+        <!-- =============================================================== -->
+        <!-- ЭКРАН 3: ПРОХОЖДЕНИЕ ТЕСТА И РЕЗУЛЬТАТЫ                      -->
+        <!-- =============================================================== -->
+        <div id="testRunnerScreen" class="hidden">
+            <header class="header">
+                <img src="/assets/logo.png" alt="Логотип Прибор Автоматика" class="logo">
+                <h1 id="testTitle" class="main-title"></h1>
+            </header>
+
+            <div class="card quiz-card hidden" id="quizForm">
+                <div class="quiz-header">
+                    <div class="timer-container no-print">
+                        <svg class="timer-svg" viewBox="0 0 100 100">
+                            <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+                            <circle id="timerProgress" class="timer-progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="timer-text-content">
+                            <div class="timer-label">Оставшееся время</div>
+                            <div id="timer">00:00</div>
+                        </div>
+                    </div>
+                    <div id="questionNavigator" class="question-navigator no-print"></div>
+                    <div class="progress-container no-print">
+                        <div class="progress-bar-wrapper">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                        <div id="progressText" class="progress-text"></div>
+                    </div>
+                </div>
+                
+                <fieldset id="testFieldset">
+                    <!-- Вопросы будут добавлены динамически -->
+                </fieldset>
+                
+                <div class="navigation-controls no-print">
+                    <button type="button" id="prevBtn" class="btn back-btn">Назад</button>
+                    <button type="button" id="nextBtn" class="btn">Далее</button>
+                </div>
+            </div>
+
+            <div class="card summary-card hidden" id="finalSummary">
+                <!-- Финальные результаты будут показаны здесь -->
+            </div>
+
+            <div class="protocol-container hidden" id="protocol">
+                <!-- Детальный протокол будет показан здесь -->
+            </div>
+
+            <div class="navigation-controls-footer hidden no-print" id="exitButtonContainer">
+                <button id="exitToSelectionBtn" class="btn back-btn">Вернуться к выбору тестов</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="no-print">
+        © 2025 Система Тестирования
+    </footer>
+
+    <!-- =============================================================== -->
+    <!-- ОБЩИЙ ЭЛЕМЕНТ: МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ                     -->
+    <!-- =============================================================== -->
+    <div id="confirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon-wrap icon-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="modal-header-text">
+                    <h3 id="confirmModalTitle">Подтвердите действие</h3>
+                    <p id="confirmModalText">Текст сообщения по умолчанию.</p>
+                </div>
+            </div>
+            <div id="confirmModalInputWrapper" class="input-wrap hidden">
+                <input id="confirmModalInput" type="text" />
+            </div>
+            <div class="modal-actions">
+                <button id="confirmModalCancelBtn" type="button" class="btn back-btn" data-modal-close>Отмена</button>
+                <button id="confirmModalOkBtn" type="button" class="btn btn-danger">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="/test-runner/script.js"></script>
+</body>
+</html>
