@@ -113,16 +113,16 @@ async function saveQuestion(testId, questionData, db) {
         await run(db, `DELETE FROM options WHERE question_id = ?`, [question.id]);
 
         if (question.type === 'checkbox' && question.options && question.options.length > 0) {
-            // Эта часть остается без изменений, т.к. работает с объектом 'statement', а не напрямую с 'db'
-            const insertOptionStmt = db.prepare(`INSERT INTO options (id, question_id, text) VALUES (?, ?, ?)`);
-            
+            // ИСПРАВЛЕНО: Унифицирован подход - используем только dbUtils.run
             for (const opt of question.options) {
                 if (opt.text.trim()) { // Вставляем только непустые варианты
                     const shortKey = opt.id.split('-').pop() || uuidv4();
-                    await util.promisify(insertOptionStmt.run.bind(insertOptionStmt))([`${question.id}-${shortKey}`, question.id, opt.text.trim()]);
+                    await run(db, 
+                        `INSERT INTO options (id, question_id, text) VALUES (?, ?, ?)`,
+                        [`${question.id}-${shortKey}`, question.id, opt.text.trim()]
+                    );
                 }
             }
-            await util.promisify(insertOptionStmt.finalize.bind(insertOptionStmt))();
         }
         
         await run(db, 'COMMIT');
